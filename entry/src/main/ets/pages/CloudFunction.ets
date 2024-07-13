@@ -37,7 +37,13 @@ export struct CloudFunction {
         onAction: this.getFunctionResult,
         isEnabled: $functionButtonEnabled
       })
-
+      CommonActionButton({
+        title: $r('app.string.cloud_function_button_text'),
+        backColor: $r('app.color.action_button_background'),
+        color: $r('app.color.start_window_background'),
+        onAction: this.getFunctionResult,
+        isEnabled: $functionButtonEnabled
+      })
       Column() {
         Text(this.globalId).fontSize($r('app.float.body_font_size'))
       }
