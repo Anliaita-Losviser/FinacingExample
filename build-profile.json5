@@ -1,27 +1,41 @@
 {
-    "app": {
-        "signingConfigs": [],
-        "compileSdkVersion": 9,
-        "compatibleSdkVersion": 9,
-        "products": [
-            {
-                "name": "default",
-                "signingConfig": "default",
-            }
-        ]
-    },
-    "modules": [
-        {
-            "name": "entry",
-            "srcPath": "./entry",
-            "targets": [
-                {
-                    "name": "default",
-                    "applyToProducts": [
-                        "default"
-                    ]
-                }
-            ]
+  "app": {
+    "signingConfigs": [
+      {
+        "name": "default",
+        "type": "HarmonyOS",
+        "material": {
+          "certpath": "C:\\Users\\asus\\.ohos\\config\\auto_debug_Application_com.example.qianfengfinacemanager_30086000659258013.cer",
+          "storePassword": "0000001B484392CE1DE9B547013FFF7C4C5CFB673BE248148F61447FDCEE89F4AABDF2DD064D1D789205B5",
+          "keyAlias": "debugKey",
+          "keyPassword": "0000001B887F13F9408B6968FA020CB375EB635F5151F92864C08A05F67B1573CC4DABB2EFB83E5F9BA61A",
+          "profile": "C:\\Users\\asus\\.ohos\\config\\auto_debug_Application_com.example.qianfengfinacemanager_30086000659258013.p7b",
+          "signAlg": "SHA256withECDSA",
+          "storeFile": "C:\\Users\\asus\\.ohos\\config\\auto_debug_Application_com.example.qianfengfinacemanager_30086000659258013.p12"
         }
+      }
+    ],
+    "compileSdkVersion": 9,
+    "compatibleSdkVersion": 9,
+    "products": [
+      {
+        "name": "default",
+        "signingConfig": "default",
+      }
     ]
+  },
+  "modules": [
+    {
+      "name": "entry",
+      "srcPath": "./entry",
+      "targets": [
+        {
+          "name": "default",
+          "applyToProducts": [
+            "default"
+          ]
+        }
+      ]
+    }
+  ]
 }

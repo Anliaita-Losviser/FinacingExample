@@ -1,36 +1,20 @@
 {
-    "color": [
-        {
-            "name": "white",
-            "value": "#ffffff"
-        },
-        {
-            "name": "start_window_background",
-            "value": "#f9fcfb"
-        },
-        {
-            "name": "action_button_background",
-            "value": "#169cd5"
-        },
-        {
-            "name": "dialog_cancel_background",
-            "value": "#D9001B"
-        },
-        {
-            "name": "black",
-            "value": "#000000"
-        },
-        {
-            "name": "body_color",
-            "value": "#333333"
-        },
-        {
-            "name": "placeholder_background",
-            "value": "#eeeeee"
-        },
-        {
-            "name": "disabled_button_background",
-            "value": "#C2C2C2"
-        }
-    ]
+  "color": [
+    {
+      "name": "white",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "black",
+      "value": "#010101"
+    },
+    {
+      "name": "background_secondary",
+      "value": "#E5E5EA"
+    },
+    {
+      "name": "theme_red",
+      "value": "#FF0000"
+    }
+  ]
 }

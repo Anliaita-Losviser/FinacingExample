@@ -243,6 +243,34 @@
         {
             "name": "common_login_fail",
             "value": "Fail to login"
-        }
+        },
+        {
+            "name": "loginpage_title",
+            "value": "Login"
+        },
+        {
+            "name": "loginpage_email_title",
+            "value": "Please enter your email"
+        },
+        {
+            "name": "loginpage_password_title",
+            "value": "Please enter your password"
+        },
+        {
+            "name": "signup",
+            "value": "Signup"
+        },
+      {
+        "name": "vertifyCode",
+          "value": "vertify code"
+      },
+      {
+        "name": "get_vertify_code",
+        "value": "get code"
+      },
+      {
+        "name": "back",
+        "value": "back"
+      }
     ]
 }

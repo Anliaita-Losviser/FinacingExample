@@ -243,6 +243,34 @@
         {
             "name": "common_login_fail",
             "value": "登录失败"
+        },
+        {
+            "name": "loginpage_title",
+            "value": "登录"
+        },
+        {
+            "name": "loginpage_email_title",
+            "value": "请输入邮箱"
+        },
+        {
+            "name": "loginpage_password_title",
+            "value": "请输入密码"
+        },
+        {
+            "name": "signup",
+            "value": "注册"
+        },
+      {
+        "name": "vertifyCode",
+        "value": "验证码"
+      },
+      {
+        "name": "get_vertify_code",
+        "value": "发送"
+      },
+        {
+            "name": "back",
+            "value": "返回"
         }
     ]
 }
