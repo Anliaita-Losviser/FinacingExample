@@ -15,6 +15,18 @@
     {
       "name": "theme_red",
       "value": "#FF0000"
+    },
+    {
+      "name": "income_background",
+      "value": "#FFB643"
+    },
+    {
+      "name": "expenditure_background",
+      "value": "#C7FFE8"
+    },
+    {
+      "name": "expenditure_font",
+      "value": "#278FFF"
     }
   ]
 }

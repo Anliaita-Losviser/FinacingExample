@@ -1,5 +1,5 @@
 /*
- * Copyright (c) StarHidden2846@gmail.com Last Update: 2024-07-13 18:50:37. All Rights Reserved.
+ * Copyright (c) StarHidden2846@gmail.com Last Update: 2024-07-15 16:46:44. All Rights Reserved.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -30,45 +30,16 @@
  */
 import { FontSizes } from '../common/CommonStyles'
 
+/**
+ * 业务选项组件，包含图标与文字
+ */
 @Component
-export struct InputWidget {
-  @State isFoucs: boolean = false
-  title: ResourceStr
-  icon: Resource
-  placeholder: ResourceStr
-  inputType: InputType = InputType.Normal
-  widgetWidth: number = 320
+export struct BusinessCardButton {
+  name: string
   build() {
     Column() {
-      Text(this.title).fontSize(FontSizes.Third).fontWeight(FontWeight.Regular)
-        .margin({ bottom: 16 }).alignSelf(ItemAlign.Start)
-
-      Row() {
-        if(this.icon)
-        {
-          Image(this.icon).Ico()
-        }
-        TextInput({ placeholder: this.placeholder })
-          .onFocus(() => {
-            this.isFoucs = true
-          })
-          .onBlur(() => {
-            this.isFoucs = false
-          })
-          .style(TextInputStyle.Inline)
-          .type(this.inputType)
-          .backgroundColor($r('app.color.white')).width(256)
-      }
-      .width(this.widgetWidth)
-      .height(50)
-      .borderRadius(15)
-      .border({ width: this.isFoucs ? 2 : 0 })
-      .justifyContent(FlexAlign.Center)
-      Divider()
-    }.width(this.widgetWidth).alignItems(HorizontalAlign.Center)
-  }
-
-  @Styles Ico(){
-    .width(32).height(32)
+      Image($r('app.media.business_example')).width(48).height(48)
+      Text(this.name).fontSize(FontSizes.Normal).margin({ top: 8, bottom: 8 })
+    }.margin({ left: 16, right: 16, top: 16, bottom: 16 })
   }
 }

@@ -29,6 +29,8 @@
  * 未经事先书面许可，不得使用开发者或贡献者的名称来认可或推广从本软件派生出来的产品。
  */
 import { Home } from '../views/Home'
+import { MyInfomation } from '../views/My'
+import { Wallet } from '../views/Wallet'
 
 @Entry
 @Component
@@ -39,7 +41,7 @@ struct MainPage {
   build() {
     Tabs({barPosition: this.curBp == 'sm'? BarPosition.End : BarPosition.Start, controller: this.tabsController}){
       TabContent() {
-        Home()
+        Home()//首页
       }
       .tabBar(this.TabBuilder($r('app.string.main_page'), 0,$r('app.media.house_fill_selected'),$r('app.media.house_fill')))
       TabContent() {
@@ -47,11 +49,11 @@ struct MainPage {
       }
       .tabBar(this.TabBuilder($r('app.string.statitstic_page'),1,$r('app.media.statistics_selected'), $r('app.media.statistics')))
       TabContent() {
-        Text('钱包').fontSize(30)
+        Wallet()
       }
       .tabBar(this.TabBuilder($r('app.string.packet_page'),2,$r('app.media.case_fill_selected'), $r('app.media.case_fill')))
       TabContent() {
-        Text('我的').fontSize(30)
+        MyInfomation()
       }
       .tabBar(this.TabBuilder($r('app.string.my_page'), 3,$r('app.media.person_crop_circle_fill_1_selected'),$r('app.media.person_crop_circle_fill_1')))
     }.vertical(this.curBp == 'sm'? false: true).margin({bottom: 28})

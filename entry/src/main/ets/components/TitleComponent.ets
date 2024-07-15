@@ -28,6 +28,7 @@
  * 以二进制形式重新分发时，必须在分发时提供的文档或其他材料中复制上述版权通知、本条件列表以及以下免责声明。
  * 未经事先书面许可，不得使用开发者或贡献者的名称来认可或推广从本软件派生出来的产品。
  */
+import { FontSizes } from '../common/CommonStyles'
 /**
  * 功能标题，有左右两个按键
  */
@@ -37,16 +38,20 @@ export struct FunctionTitleComponent {
   leftButton: Resource
   rightButton: Resource
   fontWeight: FontWeight
+  leftFunc: ()=>void
+  rightFunc: ()=>void
   @Styles FunButtonStyle()
   {
-    .height(32).width(16)
+    .height(36).width(18)
   }
 
   build() {
     Flex({ justifyContent: FlexAlign.SpaceBetween }) {
       Image(this.leftButton).FunButtonStyle()
-      Text(this.title).fontSize(32).fontWeight(this.fontWeight)
+        .onClick(this.leftFunc)
+      Text(this.title).fontSize(FontSizes.Second).fontWeight(this.fontWeight)
       Image(this.rightButton).FunButtonStyle()
+        .onClick(this.rightFunc)
     }.margin({ right: 24, left: 24, top: 36, bottom: 12 })
   }
 }

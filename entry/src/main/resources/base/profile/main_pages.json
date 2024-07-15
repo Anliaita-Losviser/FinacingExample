@@ -1,6 +1,7 @@
 {
   "src": [
     "pages/Login",
-    "pages/MainPage"
+    "pages/MainPage",
+    "pages/AddCardPage"
   ]
 }

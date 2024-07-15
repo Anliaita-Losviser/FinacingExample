@@ -1,5 +1,5 @@
 /*
- * Copyright (c) StarHidden2846@gmail.com Last Update: 2024-07-13 18:50:37. All Rights Reserved.
+ * Copyright (c) StarHidden2846@gmail.com Last Update: 2024-07-15 20:52:39. All Rights Reserved.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -28,47 +28,49 @@
  * 以二进制形式重新分发时，必须在分发时提供的文档或其他材料中复制上述版权通知、本条件列表以及以下免责声明。
  * 未经事先书面许可，不得使用开发者或贡献者的名称来认可或推广从本软件派生出来的产品。
  */
+import router from '@ohos.router'
 import { FontSizes } from '../common/CommonStyles'
-
+import { CommonTitle } from '../components/TitleComponent'
+@Preview
 @Component
-export struct InputWidget {
-  @State isFoucs: boolean = false
-  title: ResourceStr
-  icon: Resource
-  placeholder: ResourceStr
-  inputType: InputType = InputType.Normal
-  widgetWidth: number = 320
-  build() {
-    Column() {
-      Text(this.title).fontSize(FontSizes.Third).fontWeight(FontWeight.Regular)
-        .margin({ bottom: 16 }).alignSelf(ItemAlign.Start)
-
-      Row() {
-        if(this.icon)
-        {
-          Image(this.icon).Ico()
-        }
-        TextInput({ placeholder: this.placeholder })
-          .onFocus(() => {
-            this.isFoucs = true
-          })
-          .onBlur(() => {
-            this.isFoucs = false
-          })
-          .style(TextInputStyle.Inline)
-          .type(this.inputType)
-          .backgroundColor($r('app.color.white')).width(256)
-      }
-      .width(this.widgetWidth)
-      .height(50)
-      .borderRadius(15)
-      .border({ width: this.isFoucs ? 2 : 0 })
-      .justifyContent(FlexAlign.Center)
-      Divider()
-    }.width(this.widgetWidth).alignItems(HorizontalAlign.Center)
+export struct MyInfomation {
+  logout(){
+    router.replaceUrl({url: 'pages/Login'})
   }
+  build(){
+    Column(){
+      CommonTitle({
+        title: $r('app.string.my_page_title'),
+        topMargin: 24,
+        bottomMargin: 16,
+        fontWeight: FontWeight.Bold,
+        fontSize: FontSizes.Second,
+        alignWay: FlexAlign.Center
+      })
+      Column(){
+        Image($r('app.media.person_crop_circle_fill_1'))
+          .width(96).height(96)
+        Text('示例').fontSize(FontSizes.Normal)
+        Text('122@qq.com').fontSize(FontSizes.Normal)
+      }.width(256).margin({top: 24,bottom: 24})
 
-  @Styles Ico(){
-    .width(32).height(32)
+      Flex({alignItems:ItemAlign.Center,justifyContent:FlexAlign.SpaceBetween}){
+        Image($r('app.media.square_and_pencil')).height(36).width(36)
+        Text('编辑个人信息')
+        Image($r('app.media.chevron_right')).height(36).width(18)
+      }.margin({bottom:24})
+
+      Flex({alignItems:ItemAlign.Center,justifyContent:FlexAlign.SpaceBetween}){
+        Image($r('app.media.square_and_pencil')).height(36).width(36)
+        Text('个人二维码')
+        Image($r('app.media.chevron_right')).height(36).width(18)
+      }.margin({bottom:24})
+
+      Button($r('app.string.my_page_unsignin')).width(120).height(36)
+        .backgroundColor($r('app.color.theme_red'))
+        .onClick(()=>{
+          this.logout()
+        })
+    }.width(348).height('100%').justifyContent(FlexAlign.Start)
   }
 }

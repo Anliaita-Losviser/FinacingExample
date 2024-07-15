@@ -1,5 +1,5 @@
 /*
- * Copyright (c) StarHidden2846@gmail.com Last Update: 2024-07-14 18:38:19. All Rights Reserved.
+ * Copyright (c) StarHidden2846@gmail.com Last Update: 2024-07-15 16:43:40. All Rights Reserved.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -28,17 +28,18 @@
  * 以二进制形式重新分发时，必须在分发时提供的文档或其他材料中复制上述版权通知、本条件列表以及以下免责声明。
  * 未经事先书面许可，不得使用开发者或贡献者的名称来认可或推广从本软件派生出来的产品。
  */
+import router from '@ohos.router'
 import { FontSizes } from '../common/CommonStyles'
-import { BusinessCardButton } from '../components/BusinessCard'
+
 import { CommonTitle } from '../components/TitleComponent'
 import { BankCard } from './BankCard'
 import { TransactionCard } from './TransactionInfomation'
 
+@Preview
 @Component
-export struct Home {
+export struct Wallet {
   @State arr: Array<number> = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-
-  build() {
+  build(){
     Scroll(){
       Flex({ wrap: FlexWrap.Wrap,
         justifyContent: FlexAlign.Center,
@@ -48,7 +49,7 @@ export struct Home {
            * 1.标题
            */
           CommonTitle({
-            title: $r('app.string.main_page'),
+            title: $r('app.string.packet_page'),
             topMargin: 24,
             bottomMargin: 16,
             fontWeight: FontWeight.Bold,
@@ -56,12 +57,14 @@ export struct Home {
             alignWay: FlexAlign.Center
           })
           CommonTitle({
-            title: $r('app.string.main_page_welcom'),
+            title: $r('app.string.add_bankCard'),
             topMargin: 16,
             bottomMargin: 8,
             fontWeight: FontWeight.Regular,
             fontSize: FontSizes.Third,
-            alignWay: FlexAlign.Start
+            alignWay: FlexAlign.End
+          }).onClick(() =>{
+            router.pushUrl({url: 'pages/AddCardPage'})
           })
           /**
            * 2.银行卡组件
@@ -75,10 +78,10 @@ export struct Home {
             selectedColor: $r('app.color.white')
           }).margin({ top: 8, bottom: 8 })
           /**
-           * 3.功能分类
+           * 3.最近联系
            */
           CommonTitle({
-            title: $r('app.string.main_page_function_title'),
+            title: $r('app.string.wallet_page_recent_title'),
             topMargin: 24,
             bottomMargin: 8,
             fontWeight: FontWeight.Regular,
@@ -86,9 +89,9 @@ export struct Home {
             alignWay: FlexAlign.Start
           })
           Flex() {
-            BusinessCardButton({ name: '转账' })
-            BusinessCardButton({ name: '收款' })
-            BusinessCardButton({ name: '账单' })
+            RecentContactProfile()
+            RecentContactProfile()
+            RecentContactProfile()
           }
         }.width(348)
         .justifyContent(FlexAlign.Start)
@@ -103,7 +106,7 @@ export struct Home {
             topMargin: 16,
             bottomMargin: 8,
             fontWeight: FontWeight.Regular,
-            fontSize:FontSizes.Third,
+            fontSize: FontSizes.Third,
             alignWay: FlexAlign.Start
           })
           List({ space: 12 }) {
@@ -118,5 +121,13 @@ export struct Home {
         .alignItems(HorizontalAlign.Center)
       }.width('100%')
     }
+  }
+}
+
+@Component
+struct RecentContactProfile{
+  build(){
+    Image($r('app.media.business_example')).width(56).height(56)
+      .margin({ left: 16, right: 16, top: 16, bottom: 16 })
   }
 }

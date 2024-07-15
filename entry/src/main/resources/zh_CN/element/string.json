@@ -12,66 +12,6 @@
             "name": "entryability_label",
           "value": "锋盟理财"
         },
-        {
-            "name": "cloud_storage_description_main",
-            "value": "高效经济的文件上传下载服务"
-        },
-        {
-            "name": "dialog_success_title",
-            "value": "成功"
-        },
-        {
-            "name": "dialog_success_message",
-            "value": "添加新记录成功"
-        },
-        {
-            "name": "global_var_description",
-            "value": "作为全局记录插入"
-        },
-        {
-            "name": "cloudStorage_description",
-            "value": "上传图片到云存储, 获得一个可高速访问的文件链接"
-        },
-        {
-            "name": "cloudStorage_accessAddressLabel",
-            "value": "访问地址: "
-        },
-        {
-            "name": "cloudStorage_publicAccessAddressLabel",
-            "value": "公开访问地址: "
-        },
-        {
-            "name": "image_upload_label",
-            "value": "图片上传："
-        },
-        {
-            "name": "cloudStorage_link1",
-            "value": "复制"
-        },
-        {
-            "name": "cloudStorage_link2",
-            "value": "复制"
-        },
-        {
-            "name": "cloudStorage_progressLabel",
-            "value": "图片上传"
-        },
-        {
-            "name": "db_option_edit",
-            "value": "编辑"
-        },
-        {
-            "name": "media_permission_reason",
-            "value": "应用程序需要媒体权限才能显示云存储功能。"
-        },
-        {
-            "name": "cloudStorage_link_copy",
-            "value": "复制"
-        },
-        {
-            "name": "common_prompt",
-            "value": "警告"
-        },
       {
             "name": "loginpage_title",
             "value": "登录"
@@ -127,6 +67,46 @@
       {
         "name": "main_page_transaction_title",
         "value": "交易信息"
+      },
+      {
+        "name": "add_bankCard",
+        "value": "添加"
+      },
+      {
+        "name": "wallet_page_recent_title",
+        "value": "最近联系"
+      },
+      {
+        "name": "add_card_page_title",
+        "value": "添加银行卡"
+      },
+      {
+        "name": "card_infomation",
+        "value": "卡片信息"
+      },
+      {
+        "name": "bankCard_number",
+        "value": "银行卡号"
+      },
+      {
+        "name": "owner_name",
+        "value": "姓名"
+      },
+      {
+        "name": "CCV",
+        "value": "CCV"
+      },
+      {
+        "name": "due_date",
+        "value": "到期时间"
+      },
+      {
+        "name": "my_page_title",
+        "value": "个人资料"
+      },
+      {
+        "name": "my_page_unsignin",
+        "value": "退出登录"
       }
     ]
 }

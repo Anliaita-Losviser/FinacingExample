@@ -1,5 +1,5 @@
 /*
- * Copyright (c) StarHidden2846@gmail.com Last Update: 2024-07-13 18:50:37. All Rights Reserved.
+ * Copyright (c) StarHidden2846@gmail.com Last Update: 2024-07-15 14:14:39. All Rights Reserved.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -29,46 +29,26 @@
  * 未经事先书面许可，不得使用开发者或贡献者的名称来认可或推广从本软件派生出来的产品。
  */
 import { FontSizes } from '../common/CommonStyles'
-
+@Preview
 @Component
-export struct InputWidget {
-  @State isFoucs: boolean = false
-  title: ResourceStr
-  icon: Resource
-  placeholder: ResourceStr
-  inputType: InputType = InputType.Normal
-  widgetWidth: number = 320
-  build() {
-    Column() {
-      Text(this.title).fontSize(FontSizes.Third).fontWeight(FontWeight.Regular)
-        .margin({ bottom: 16 }).alignSelf(ItemAlign.Start)
-
-      Row() {
-        if(this.icon)
-        {
-          Image(this.icon).Ico()
-        }
-        TextInput({ placeholder: this.placeholder })
-          .onFocus(() => {
-            this.isFoucs = true
-          })
-          .onBlur(() => {
-            this.isFoucs = false
-          })
-          .style(TextInputStyle.Inline)
-          .type(this.inputType)
-          .backgroundColor($r('app.color.white')).width(256)
+export struct TransactionCard{
+  build(){
+    Flex() {
+      Flex() {
+        Image($r('app.media.business_example'))
+          .width(48).height(48)
+        Flex({ direction: FlexDirection.Column }) {
+          Text('百事可乐').margin({bottom:4})
+            .fontSize(FontSizes.Normal).fontWeight(FontWeight.Normal)
+          Text('2024年7月14日')
+            .fontSize(FontSizes.Normal).fontWeight(FontWeight.Lighter)
+        }.margin({top:8,bottom:8,left:16})
       }
-      .width(this.widgetWidth)
-      .height(50)
-      .borderRadius(15)
-      .border({ width: this.isFoucs ? 2 : 0 })
-      .justifyContent(FlexAlign.Center)
-      Divider()
-    }.width(this.widgetWidth).alignItems(HorizontalAlign.Center)
-  }
-
-  @Styles Ico(){
-    .width(32).height(32)
+      Text(`-100`)
+        .width(120).margin(12).padding(8)
+        .fontColor($r('app.color.expenditure_font'))
+        .backgroundColor($r('app.color.expenditure_background'))
+        .textAlign(TextAlign.Center).borderRadius(24)
+    }.border({width:{bottom:4},color: $r('app.color.background_secondary')})
   }
 }

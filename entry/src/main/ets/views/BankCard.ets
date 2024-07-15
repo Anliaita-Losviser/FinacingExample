@@ -28,23 +28,24 @@
  * 以二进制形式重新分发时，必须在分发时提供的文档或其他材料中复制上述版权通知、本条件列表以及以下免责声明。
  * 未经事先书面许可，不得使用开发者或贡献者的名称来认可或推广从本软件派生出来的产品。
  */
+import { FontSizes } from '../common/CommonStyles'
 
 @Component
 export struct BankCard {
-  bankName: string
-  balance: string
-  bankCardNumber: string
+  bankName: string = ''
+  balance: number = 0
+  bankCardNumber: string = 'xxx xxx xxx xxx xxx xxx xxx'
   build(){
     Column(){
       Flex({justifyContent:FlexAlign.SpaceBetween,
         alignItems:ItemAlign.Center}){
-        Text(this.bankName).fontSize(16).fontColor($r('app.color.white'))
+        Text(this.bankName).fontSize(FontSizes.Normal).fontColor($r('app.color.white'))
       }
 
       Flex({justifyContent:FlexAlign.Start,
         alignItems:ItemAlign.Center}){
-        Text('￥').fontSize(16).fontColor($r('app.color.white'))
-        Text(this.balance).fontSize(24).fontWeight(FontWeight.Bold).fontColor($r('app.color.white'))
+        Text('￥').fontSize(FontSizes.Normal).fontColor($r('app.color.white'))
+        Text(`${this.balance}`).fontSize(FontSizes.Second).fontWeight(FontWeight.Bold).fontColor($r('app.color.white'))
       }.margin({top:36})
 
       Flex(){

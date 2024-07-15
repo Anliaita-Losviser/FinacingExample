@@ -29,6 +29,7 @@
  * 未经事先书面许可，不得使用开发者或贡献者的名称来认可或推广从本软件派生出来的产品。
  */
 import router from '@ohos.router'
+import { FontSizes } from '../common/CommonStyles'
 import { InputWidget } from '../components/Input'
 import { FunctionTitleComponent } from '../components/TitleComponent'
 
@@ -71,17 +72,17 @@ struct Login {
         //邮箱框
         InputWidget({ title: $r('app.string.loginpage_email_title'),
           icon: $r('app.media.envelope_fill') })
-          .margin({ top: 8, bottom: 8 })
+          .margin({ top: 16, bottom: 16 })
         //密码
         InputWidget({ title: $r('app.string.loginpage_password_title'),
           icon: $r('app.media.lock_fill'),
           inputType: InputType.Password })
-          .margin({ top: 8, bottom: 8 })
+          .margin({ top: 16, bottom: 16 })
         //验证码输入框
         if(this.isRegister)
         {
           Column() {
-            Text($r('app.string.vertifyCode')).fontSize(24).fontWeight(FontWeight.Regular)
+            Text($r('app.string.vertifyCode')).fontSize(FontSizes.Third).fontWeight(FontWeight.Regular)
             Flex(){
               TextInput()
                 .width(272).margin({ left: 8, right: 8})
@@ -114,6 +115,6 @@ struct Login {
     .width('100%').height('100%').backgroundColor($r('app.color.background_secondary'))
   }
 
-  @Styles BottonStyle(){.width(120).height(36).margin({ top: 8, bottom: 8 })}
+  @Styles BottonStyle(){.width(120).height(36).margin({ top: 16, bottom: 16 })}
 
 }
