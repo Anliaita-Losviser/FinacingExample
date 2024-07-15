@@ -30,7 +30,7 @@
  */
 import router from '@ohos.router'
 import { InputWidget } from '../components/Input'
-import { TitleComponent } from '../components/TitleComponent'
+import { FunctionTitleComponent } from '../components/TitleComponent'
 
 
 @Entry
@@ -46,7 +46,7 @@ struct Login {
     this.StartCountDown()
   }
   /**
-   * 倒计时功能
+   * 定时器倒计时功能
    */
   StartCountDown(){
     this.timer = setInterval(()=>{
@@ -63,7 +63,9 @@ struct Login {
       justifyContent: FlexAlign.Center,
       alignItems: ItemAlign.Center }) {
       //标题栏
-      TitleComponent({ title: $r('app.string.loginpage_title') }).width(360)
+      FunctionTitleComponent({ title: $r('app.string.loginpage_title'),
+        leftButton: $r('app.media.chevron_left'),
+        fontWeight:FontWeight.Bold}).width(360)
       //表单,列式布局
       Column() {
         //邮箱框
@@ -93,11 +95,13 @@ struct Login {
             }.height(50).margin({ top: 8, bottom: 8 })
           }
         }
+        //登录按钮
         Button($r('app.string.loginpage_title')).BottonStyle()
           .backgroundColor($r('app.color.theme_red'))
           .onClick(()=>{
             router.replaceUrl({url: 'pages/MainPage'})
           })
+        //注册按钮
         Button(this.isRegister == false ? $r('app.string.signup') : $r('app.string.back'))
           .BottonStyle()
           .fontColor($r('app.color.black'))

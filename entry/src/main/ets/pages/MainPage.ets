@@ -28,21 +28,58 @@
  * 以二进制形式重新分发时，必须在分发时提供的文档或其他材料中复制上述版权通知、本条件列表以及以下免责声明。
  * 未经事先书面许可，不得使用开发者或贡献者的名称来认可或推广从本软件派生出来的产品。
  */
+import { Home } from '../views/Home'
 
 @Entry
 @Component
 struct MainPage {
-  @State message: string = 'Hello World'
-
+  @StorageProp('currentBreakpoint') curBp: string = 'sm'
+  @State currentIndex: number = 0
+  private tabsController: TabsController = new TabsController()
   build() {
-    Row() {
-      Column() {
-        Text(this.message)
-          .fontSize(50)
-          .fontWeight(FontWeight.Bold)
+    Tabs({barPosition: this.curBp == 'sm'? BarPosition.End : BarPosition.Start, controller: this.tabsController}){
+      TabContent() {
+        Home()
       }
-      .width('100%')
+      .tabBar(this.TabBuilder($r('app.string.main_page'), 0,$r('app.media.house_fill_selected'),$r('app.media.house_fill')))
+      TabContent() {
+        Text('统计').fontSize(30)
+      }
+      .tabBar(this.TabBuilder($r('app.string.statitstic_page'),1,$r('app.media.statistics_selected'), $r('app.media.statistics')))
+      TabContent() {
+        Text('钱包').fontSize(30)
+      }
+      .tabBar(this.TabBuilder($r('app.string.packet_page'),2,$r('app.media.case_fill_selected'), $r('app.media.case_fill')))
+      TabContent() {
+        Text('我的').fontSize(30)
+      }
+      .tabBar(this.TabBuilder($r('app.string.my_page'), 3,$r('app.media.person_crop_circle_fill_1_selected'),$r('app.media.person_crop_circle_fill_1')))
+    }.vertical(this.curBp == 'sm'? false: true).margin({bottom: 28})
+    .backgroundColor($r('app.color.white')).scrollable(false)
+  }
+  /**
+   *
+   * @param title：tab的标题
+   * @param targetIndex：目标页面
+   * @param selectedImg：选中状态的图片
+   * @param normalImg：未选中状态的图片
+   */
+  @Builder TabBuilder(title: ResourceStr, targetIndex: number, selectedImg: Resource, normalImg: Resource) {
+    Column() {
+      Image(this.currentIndex === targetIndex ? selectedImg : normalImg)
+        .size({ width: 25, height: 25 })
+      Text(title)
+        .fontColor(this.currentIndex === targetIndex ? $r('app.color.theme_red') : $r('app.color.black'))
     }
-    .height('100%')
+    .width('100%')
+    .height(50)
+    .justifyContent(FlexAlign.Center)
+    .onClick(() => {
+      /**
+       * tab组件的点击切换逻辑
+       */
+      this.currentIndex = targetIndex;
+      this.tabsController.changeIndex(this.currentIndex);
+    })
   }
 }

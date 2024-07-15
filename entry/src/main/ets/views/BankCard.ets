@@ -1,5 +1,5 @@
 /*
- * Copyright (c) StarHidden2846@gmail.com Last Update: 2024-07-13 15:58:18. All Rights Reserved.
+ * Copyright (c) StarHidden2846@gmail.com Last Update: 2024-07-14 19:49:05. All Rights Reserved.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -28,42 +28,30 @@
  * 以二进制形式重新分发时，必须在分发时提供的文档或其他材料中复制上述版权通知、本条件列表以及以下免责声明。
  * 未经事先书面许可，不得使用开发者或贡献者的名称来认可或推广从本软件派生出来的产品。
  */
-/**
- * 功能标题，有左右两个按键
- */
-@Component
-export struct FunctionTitleComponent {
-  title: ResourceStr
-  leftButton: Resource
-  rightButton: Resource
-  fontWeight: FontWeight
-  @Styles FunButtonStyle()
-  {
-    .height(32).width(16)
-  }
 
-  build() {
-    Flex({ justifyContent: FlexAlign.SpaceBetween }) {
-      Image(this.leftButton).FunButtonStyle()
-      Text(this.title).fontSize(32).fontWeight(this.fontWeight)
-      Image(this.rightButton).FunButtonStyle()
-    }.margin({ right: 24, left: 24, top: 36, bottom: 12 })
-  }
-}
-/**
- * 普通标题，仅展示文本
- */
 @Component
-export struct CommonTitle{
-  title: ResourceStr
-  fontWeight: FontWeight
-  fontSize: number
-  alignWay: FlexAlign
-  topMargin: number
-  bottomMargin: number
+export struct BankCard {
+  bankName: string
+  balance: string
+  bankCardNumber: string
   build(){
-    Flex({justifyContent: this.alignWay, alignItems: ItemAlign.Center}){
-      Text(this.title).fontSize(this.fontSize).fontWeight(this.fontWeight)
-    }.margin({top: this.topMargin,bottom:this.bottomMargin})
+    Column(){
+      Flex({justifyContent:FlexAlign.SpaceBetween,
+        alignItems:ItemAlign.Center}){
+        Text(this.bankName).fontSize(16).fontColor($r('app.color.white'))
+      }
+
+      Flex({justifyContent:FlexAlign.Start,
+        alignItems:ItemAlign.Center}){
+        Text('￥').fontSize(16).fontColor($r('app.color.white'))
+        Text(this.balance).fontSize(24).fontWeight(FontWeight.Bold).fontColor($r('app.color.white'))
+      }.margin({top:36})
+
+      Flex(){
+        Text(this.bankCardNumber).fontSize(12).fontColor($r('app.color.white'))
+      }.margin({top: 12})
+    }.width(324).height(168).padding(24)
+    .backgroundImage($r('app.media.card_bacground'))
+    .backgroundImageSize({width:'100%', height:'100%'})
   }
 }

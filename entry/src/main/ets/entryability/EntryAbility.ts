@@ -33,46 +33,73 @@ import hilog from '@ohos.hilog';
 import UIAbility from '@ohos.app.ability.UIAbility';
 import Window from '@ohos.window';
 import abilityAccessCtrl from '@ohos.abilityAccessCtrl';
+import window from '@ohos.window';
+import display from '@ohos.display';
 
 export default class EntryAbility extends UIAbility {
-    onCreate() {
-        let AtManager = abilityAccessCtrl.createAtManager();
-        AtManager.requestPermissionsFromUser(this.context, ['ohos.permission.READ_MEDIA', 'ohos.permission.MEDIA_LOCATION']).then((data) => {
-            hilog.info(0x0000, 'testTag', '%{public}s', 'request permissions from user success' + data);
-        }).catch((err) => {
-            hilog.error(0x0000, 'testTag', 'Failed to request permissions from user. Cause: %{public}s', JSON.stringify(err) ?? '');
-        });
-        hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onCreate');
-    }
+  private windowObj?: window.Window
+  private curBp: string = ''
 
-    onDestroy() {
-        hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onDestroy');
+  private updateBreakpoint(windowWidth: number) :void{
+    // 将长度的单位由px换算为vp
+    let windowWidthVp = windowWidth / display.getDefaultDisplaySync().densityPixels
+    let newBp: string = ''
+    if (windowWidthVp < 520) {
+      newBp = 'sm'
+    }else {
+      newBp = 'lg'
     }
+    if (this.curBp !== newBp) {
+      this.curBp = newBp
+      // 使用状态变量记录当前断点值
+      AppStorage.SetOrCreate('currentBreakpoint', this.curBp)
+    }
+  }
+  onCreate() {
+    let AtManager = abilityAccessCtrl.createAtManager();
+    AtManager.requestPermissionsFromUser(this.context, ['ohos.permission.READ_MEDIA', 'ohos.permission.MEDIA_LOCATION']).then((data) => {
+      hilog.info(0x0000, 'testTag', '%{public}s', 'request permissions from user success' + data);
+    }).catch((err) => {
+      hilog.error(0x0000, 'testTag', 'Failed to request permissions from user. Cause: %{public}s', JSON.stringify(err) ?? '');
+    });
+    hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onCreate');
+  }
 
-    onWindowStageCreate(windowStage: Window.WindowStage) {
-        // Main window is created, set main page for this ability
-        hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onWindowStageCreate');
-        windowStage.loadContent('pages/Login', (err, data) => {
-            if (err.code) {
-                hilog.error(0x0000, 'testTag', 'Failed to load the content. Cause: %{public}s', JSON.stringify(err) ?? '');
-                return;
-            }
-            hilog.info(0x0000, 'testTag', 'Succeeded in loading the content. Data: %{public}s', JSON.stringify(data) ?? '');
-        });
-    }
+  onDestroy() {
+    hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onDestroy');
+  }
 
-    onWindowStageDestroy() {
-        // Main window is destroyed, release UI related resources
-        hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onWindowStageDestroy');
-    }
+  onWindowStageCreate(windowStage: Window.WindowStage): void {
+    // Main window is created, set main page for this ability
+    hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onWindowStageCreate');
+    windowStage.loadContent('pages/Login', (err, data) => {
+      if (err.code) {
+        hilog.error(0x0000, 'testTag', 'Failed to load the content. Cause: %{public}s', JSON.stringify(err) ?? '');
+        return;
+      }
+      hilog.info(0x0000, 'testTag', 'Succeeded in loading the content. Data: %{public}s', JSON.stringify(data) ?? '');
+    });
+    windowStage.getMainWindow().then((windowObj)=>{
+      this.windowObj = windowObj
+      this.updateBreakpoint(windowObj.getWindowProperties().windowRect.width)
+      windowObj.on('windowSizeChange', (windowSize)=>{
+        this.updateBreakpoint(windowSize.width)
+      })
+    })
+  }
 
-    onForeground() {
-        // Ability has brought to foreground
-        hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onForeground');
-    }
+  onWindowStageDestroy() {
+    // Main window is destroyed, release UI related resources
+    hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onWindowStageDestroy');
+  }
 
-    onBackground() {
-        // Ability has back to background
-        hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onBackground');
-    }
+  onForeground() {
+    // Ability has brought to foreground
+    hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onForeground');
+  }
+
+  onBackground() {
+    // Ability has back to background
+    hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onBackground');
+  }
 }
