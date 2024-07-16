@@ -1,5 +1,5 @@
 /*
- * Copyright (c) StarHidden2846@gmail.com Last Update: 2024-07-15 20:52:39. All Rights Reserved.
+ * Copyright (c) StarHidden2846@gmail.com Last Update: 2024-07-16 11:54:54. All Rights Reserved.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -30,57 +30,48 @@
  */
 import router from '@ohos.router'
 import { FontSizes } from '../common/CommonStyles'
-import { CommonTitle } from '../components/TitleComponent'
-@Preview
+import { InputWidget } from '../components/Input'
+import { CommonTitle, FunctionTitleComponent } from '../components/TitleComponent'
+
+@Entry
 @Component
-export struct MyInfomation {
-  logout(){
-    router.replaceUrl({url: 'pages/Login'})
-  }
-  build(){
+struct EditPersonPage {
+  build() {
     Column(){
-      CommonTitle({
-        title: $r('app.string.my_page_title'),
-        topMargin: 24,
-        bottomMargin: 16,
+      //标题
+      FunctionTitleComponent({ title: $r('app.string.edit_my_page_title'),
+        leftButton: $r('app.media.chevron_left'),
+        leftFunc: ()=>{
+          router.back()
+        },
+        fontWeight:FontWeight.Bold}).width(360)
+      //头像
+      Image($r('app.media.person_crop_circle_fill_1'))
+        .width(96).height(96)
+      //小标题“个人信息”
+      CommonTitle({title: $r('app.string.my_page_title'),
         fontWeight: FontWeight.Bold,
-        fontSize: FontSizes.Second,
-        alignWay: FlexAlign.Center
-      })
-      //个人信息栏
-      Column(){
-        Image($r('app.media.person_crop_circle_fill_1'))
-          .width(96).height(96)
-        Text('示例').fontSize(FontSizes.Normal)
-        Text('122@qq.com').fontSize(FontSizes.Normal)
-      }.width(256).margin({top: 24,bottom: 24})
-
-      Flex({alignItems:ItemAlign.Center,justifyContent:FlexAlign.SpaceBetween}){
-        Image($r('app.media.square_and_pencil')).height(36).width(36)
-        Text('编辑个人信息')
-        Image($r('app.media.chevron_right')).height(36).width(18)
+        fontSize:FontSizes.Third,
+        alignWay: FlexAlign.Start,
+        topMargin: 16,
+        bottomMargin: 8}).width(320)
+      //表单，姓名、电话、邮箱、出生日期、性别
+      InputWidget({title: $r('app.string.owner_name')}).margin({top: 8})
+      InputWidget({title: $r('app.string.edit_my_page_phoneNumber')}).margin({top: 8})
+      InputWidget({title: $r('app.string.edit_my_page_email')}).margin({top: 8})
+      //确认、取消按钮
+      Row(){
+        Button($r('app.string.edit_page_cancel'))
+          .width(120).height(36).margin({ top: 16, bottom: 16 })
+          .backgroundColor($r('app.color.background_secondary'))
+          .fontColor($r('app.color.theme_red'))
           .onClick(()=>{
-            /**
-             * 跳转到编辑页面
-             */
-            router.pushUrl({url: 'pages/EditPersonPage'})
+            router.back()
           })
-      }.margin({bottom:24}).padding(8)
-
-      Flex({alignItems:ItemAlign.Center,justifyContent:FlexAlign.SpaceBetween}){
-        Image($r('app.media.square_and_pencil')).height(36).width(36)
-        Text('个人二维码')
-        Image($r('app.media.chevron_right')).height(36).width(18)
-          .onClick(()=>{
-            router.pushUrl({url: 'pages/QRcodeGeneratePage'})
-          })
-      }.margin({bottom:24}).padding(8)
-
-      Button($r('app.string.my_page_unsignin')).width(120).height(36)
-        .backgroundColor($r('app.color.theme_red'))
-        .onClick(()=>{
-          this.logout()
-        })
-    }.width(348).height('100%').justifyContent(FlexAlign.Start)
+        Button($r('app.string.edit_page_confirm'))
+          .width(120).height(36).margin({ top: 16, bottom: 16 })
+          .backgroundColor($r('app.color.theme_red'))
+      }.width('100%').justifyContent(FlexAlign.SpaceEvenly)
+    }.width('100%').height('100%').alignItems(HorizontalAlign.Center)
   }
 }

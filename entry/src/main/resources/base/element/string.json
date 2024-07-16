@@ -107,6 +107,38 @@
     {
       "name": "my_page_unsignin",
       "value": "退出登录"
+    },
+    {
+      "name": "edit_my_page_title",
+      "value": "编辑个人资料"
+    },
+    {
+      "name": "edit_my_page_phoneNumber",
+      "value": "联系电话"
+    },
+    {
+      "name": "edit_my_page_email",
+      "value": "邮箱"
+    },
+    {
+      "name": "edit_page_confirm",
+      "value": "确认"
+    },
+    {
+      "name": "edit_page_cancel",
+      "value": "取消"
+    },
+    {
+      "name": "pay_page_title",
+      "value": "支付"
+    },
+    {
+      "name": "pay_account",
+      "value": "支付账户"
+    },
+    {
+      "name": "pay_amount",
+      "value": "支付金额"
     }
   ]
 }

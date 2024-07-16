@@ -2,6 +2,9 @@
   "src": [
     "pages/Login",
     "pages/MainPage",
-    "pages/AddCardPage"
+    "pages/AddCardPage",
+    "pages/EditPersonPage",
+    "pages/QRcodeGeneratePage",
+    "pages/PayPage"
   ]
 }

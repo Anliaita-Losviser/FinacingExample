@@ -1,5 +1,5 @@
 /*
- * Copyright (c) StarHidden2846@gmail.com Last Update: 2024-07-15 17:24:09. All Rights Reserved.
+ * Copyright (c) StarHidden2846@gmail.com Last Update: 2024-07-16 14:11:18. All Rights Reserved.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -29,48 +29,21 @@
  * 未经事先书面许可，不得使用开发者或贡献者的名称来认可或推广从本软件派生出来的产品。
  */
 import router from '@ohos.router'
-import { FontSizes } from '../common/CommonStyles'
-import { InputWidget } from '../components/Input'
-import { CommonTitle, FunctionTitleComponent } from '../components/TitleComponent'
+import { FunctionTitleComponent } from '../components/TitleComponent'
 
 @Entry
 @Component
-struct AddCardPage {
-  @State message: string = 'Hello World'
-
+struct QRcodeGeneratePage {
   build() {
-    Flex({ wrap: FlexWrap.Wrap,
-      direction: FlexDirection.Row,
-      justifyContent: FlexAlign.Center,
-      alignItems: ItemAlign.Center }){
-      //标题栏
-      FunctionTitleComponent({ title: $r('app.string.add_card_page_title'),
+    Column(){
+      FunctionTitleComponent({
         leftButton: $r('app.media.chevron_left'),
         leftFunc: ()=>{
           router.back()
         },
         fontWeight:FontWeight.Bold}).width(360)
-      /**
-       * 表单页面
-       */
-      Column(){
-        //小标题
-        CommonTitle({title: $r('app.string.card_infomation'),
-          fontWeight: FontWeight.Bold,
-          fontSize:FontSizes.Second,
-          alignWay: FlexAlign.Start,
-          topMargin: 16,
-          bottomMargin: 8}).margin({left: 14})
-        InputWidget({title: $r('app.string.bankCard_number')})
-        InputWidget({title: $r('app.string.owner_name')})
-        .margin({top: 16,bottom: 16})
-        Row(){
-          InputWidget({title: $r('app.string.CCV'),widgetWidth: 148})
-          InputWidget({title: $r('app.string.due_date'),widgetWidth: 148})
-        }.width(320).justifyContent(FlexAlign.SpaceBetween).margin({bottom:16})
-        Button($r('app.string.add_bankCard')).width(120).height(36)
-          .backgroundColor($r('app.color.theme_red'))
-      }.width(348).margin({ top:16, bottom: 16 })
-    }
+      //二维码
+      QRCode('1').width(256).height(256)
+    }.width('100%').height('100%')
   }
 }

@@ -107,6 +107,38 @@
       {
         "name": "my_page_unsignin",
         "value": "Unsignin"
+      },
+      {
+        "name": "edit_my_page_title",
+        "value": "Edit Personal Infomation"
+      },
+      {
+        "name": "edit_my_page_phoneNumber",
+        "value": "Phone Number"
+      },
+      {
+        "name": "edit_my_page_email",
+        "value": "Email"
+      },
+      {
+        "name": "edit_page_confirm",
+        "value": "Confirm"
+      },
+      {
+        "name": "edit_page_cancel",
+        "value": "Cancel"
+      },
+      {
+        "name": "pay_page_title",
+        "value": "Pay"
+      },
+      {
+        "name": "pay_account",
+        "value": "Payment Account"
+      },
+      {
+        "name": "pay_amount",
+        "value": "Payment Amount"
       }
     ]
 }

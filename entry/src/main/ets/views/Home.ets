@@ -28,6 +28,7 @@
  * 以二进制形式重新分发时，必须在分发时提供的文档或其他材料中复制上述版权通知、本条件列表以及以下免责声明。
  * 未经事先书面许可，不得使用开发者或贡献者的名称来认可或推广从本软件派生出来的产品。
  */
+import router from '@ohos.router'
 import { FontSizes } from '../common/CommonStyles'
 import { BusinessCardButton } from '../components/BusinessCard'
 import { CommonTitle } from '../components/TitleComponent'
@@ -87,6 +88,9 @@ export struct Home {
           })
           Flex() {
             BusinessCardButton({ name: '转账' })
+              .onClick(()=> {
+                router.pushUrl({url: 'pages/PayPage'})
+              })
             BusinessCardButton({ name: '收款' })
             BusinessCardButton({ name: '账单' })
           }
