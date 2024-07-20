@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) StarHidden2846@gmail.com Last Update: 2024-07-15 17:24:09. All Rights Reserved.
  *
@@ -32,12 +33,20 @@ import router from '@ohos.router'
 import { FontSizes } from '../common/CommonStyles'
 import { InputWidget } from '../components/Input'
 import { CommonTitle, FunctionTitleComponent } from '../components/TitleComponent'
-
+import agconnect from '@hw-agconnect/api-ohos'
+import { addBankCard } from '../services/CloudServices'
+import Notification from '@system.notification'
 @Entry
 @Component
 struct AddCardPage {
-  @State message: string = 'Hello World'
-
+  payload = {
+    uuid: '',
+    expiredAt: '',
+    bank: '',
+    name: '',
+    cardNumber: '',
+    ccv: ''
+  }
   build() {
     Flex({ wrap: FlexWrap.Wrap,
       direction: FlexDirection.Row,
@@ -61,15 +70,66 @@ struct AddCardPage {
           alignWay: FlexAlign.Start,
           topMargin: 16,
           bottomMargin: 8}).margin({left: 14})
-        InputWidget({title: $r('app.string.bankCard_number')})
-        InputWidget({title: $r('app.string.owner_name')})
+        InputWidget({title: $r('app.string.card_belong_to'),
+          change: (val: string)=>{
+            this.payload.bank = val
+          }})
+        InputWidget({title: $r('app.string.bankCard_number'),
+          change: (val: string)=>{
+            this.payload.cardNumber = val
+        }}).margin({top: 16})
+        InputWidget({title: $r('app.string.owner_name'),
+          change: (val: string)=>{
+            this.payload.name = val
+          }})
         .margin({top: 16,bottom: 16})
         Row(){
-          InputWidget({title: $r('app.string.CCV'),widgetWidth: 148})
-          InputWidget({title: $r('app.string.due_date'),widgetWidth: 148})
+          InputWidget({title: $r('app.string.CCV'),widgetWidth: 148,
+            change: (val: string)=>{
+              this.payload.ccv = val
+            }})
+          InputWidget({title: $r('app.string.due_date'),widgetWidth: 148,
+            change: (val: string)=>{
+              this.payload.expiredAt = val
+            }})
         }.width(320).justifyContent(FlexAlign.SpaceBetween).margin({bottom:16})
         Button($r('app.string.add_bankCard')).width(120).height(36)
           .backgroundColor($r('app.color.theme_red'))
+          .onClick(async ()=>{
+            try{
+              //获取当前登录用户的信息
+              const user = await agconnect.auth().getCurrentUser()
+              if (!user){
+                //未登录则跳到登录页面
+                router.replaceUrl({url: 'pages/Login'})
+                return
+              }
+              //添加当前用户uuid
+              this.payload.uuid = user.getUid()
+              //拿到卡片信息
+              console.log(JSON.stringify(this.payload))
+              //执行添加银行卡的操作
+              const result = await addBankCard(this.payload)
+              if(result.status){
+                //提示成功，返回上一页
+                Notification.show({
+                  contentTitle:'添加成功'
+                })
+                setTimeout(()=>{
+                  //延时1秒再返回上一页
+                  router.back()
+                },1000)
+              }else {
+                //提示失败
+                Notification.show({
+                  contentTitle:'添加失败'+result.errMsg
+                })
+              }
+            }catch (error){
+              console.error(error,'添加错误')
+            }
+
+          })
       }.width(348).margin({ top:16, bottom: 16 })
     }
   }

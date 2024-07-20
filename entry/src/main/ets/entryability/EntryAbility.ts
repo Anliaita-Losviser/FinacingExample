@@ -35,7 +35,10 @@ import Window from '@ohos.window';
 import abilityAccessCtrl from '@ohos.abilityAccessCtrl';
 import window from '@ohos.window';
 import display from '@ohos.display';
-
+import agconnect from '@hw-agconnect/api-ohos';
+import '@hw-agconnect/core-ohos'
+import '@hw-agconnect/auth-ohos'
+import '@hw-agconnect/function-ohos'
 export default class EntryAbility extends UIAbility {
   private windowObj?: window.Window
   private curBp: string = ''
@@ -63,6 +66,10 @@ export default class EntryAbility extends UIAbility {
       hilog.error(0x0000, 'testTag', 'Failed to request permissions from user. Cause: %{public}s', JSON.stringify(err) ?? '');
     });
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onCreate');
+    /**
+     * 全局初始化agconnect服务
+     */
+    agconnect.instance().init(this.context.getApplicationContext())
   }
 
   onDestroy() {

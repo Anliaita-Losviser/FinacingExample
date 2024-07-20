@@ -31,6 +31,10 @@
 import { Home } from '../views/Home'
 import { MyInfomation } from '../views/My'
 import { Wallet } from '../views/Wallet'
+import { Card } from '../models/CardModel'
+import CardModel from '../viewModels/CardViewmodel'
+import { User } from '../models/userData'
+import userModel from '../viewModels/UserViewmodel'
 
 @Entry
 @Component
@@ -38,13 +42,32 @@ struct MainPage {
   @StorageProp('currentBreakpoint') curBp: string = 'sm'
   @State currentIndex: number = 0
   private tabsController: TabsController = new TabsController()
+  //银行卡信息
+  @State cards: Card[]=[]
+  //用户信息
+  @State userInfo: User = new User()
+  async onPageShow(){
+    try {
+      CardModel.getCardList().then((data)=>{
+          this.cards = data
+        })
+        .catch (error => {console.error(error)})
+      userModel.getUserInfo().then((data)=>{
+        this.userInfo = data
+      }).catch(error => {console.error(error)})
+    }catch (error){
+      console.error(error,'错误')
+    }
+  }
+
   build() {
     Tabs({barPosition: this.curBp == 'sm'? BarPosition.End : BarPosition.Start, controller: this.tabsController}){
       TabContent() {
-        Home()//首页
+        Home({cards: $cards})//首页
       }
       .tabBar(this.TabBuilder($r('app.string.main_page'), 0,$r('app.media.house_fill_selected'),$r('app.media.house_fill')))
       TabContent() {
+        //统计页面用webview实现
         Text('统计').fontSize(30)
       }
       .tabBar(this.TabBuilder($r('app.string.statitstic_page'),1,$r('app.media.statistics_selected'), $r('app.media.statistics')))
@@ -53,7 +76,7 @@ struct MainPage {
       }
       .tabBar(this.TabBuilder($r('app.string.packet_page'),2,$r('app.media.case_fill_selected'), $r('app.media.case_fill')))
       TabContent() {
-        MyInfomation()
+        MyInfomation({userInfo: $userInfo})
       }
       .tabBar(this.TabBuilder($r('app.string.my_page'), 3,$r('app.media.person_crop_circle_fill_1_selected'),$r('app.media.person_crop_circle_fill_1')))
     }.vertical(this.curBp == 'sm'? false: true).margin({bottom: 28})

@@ -120,7 +120,7 @@ export struct Wallet {
         .justifyContent(FlexAlign.Start)
         .alignItems(HorizontalAlign.Center)
       }.width('100%')
-    }
+    }.scrollBar(BarState.Off)
   }
 }
 

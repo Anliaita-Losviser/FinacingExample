@@ -31,10 +31,18 @@
 import router from '@ohos.router'
 import { FontSizes } from '../common/CommonStyles'
 import { CommonTitle } from '../components/TitleComponent'
+import agconnect from '@hw-agconnect/api-ohos'
+import { User } from '../models/userData'
+import userModel from '../viewModels/UserViewmodel'
 @Preview
 @Component
 export struct MyInfomation {
+  @Link userInfo: User
+
   logout(){
+    //退出登录，回到登录页面
+    // @ts-ignore
+    agconnect.auth().signOut()
     router.replaceUrl({url: 'pages/Login'})
   }
   build(){
@@ -52,7 +60,7 @@ export struct MyInfomation {
         Image($r('app.media.person_crop_circle_fill_1'))
           .width(96).height(96)
         Text('示例').fontSize(FontSizes.Normal)
-        Text('122@qq.com').fontSize(FontSizes.Normal)
+        Text(this.userInfo.email).fontSize(FontSizes.Normal)
       }.width(256).margin({top: 24,bottom: 24})
 
       Flex({alignItems:ItemAlign.Center,justifyContent:FlexAlign.SpaceBetween}){

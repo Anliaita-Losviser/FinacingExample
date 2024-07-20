@@ -139,6 +139,10 @@
     {
       "name": "pay_amount",
       "value": "支付金额"
+    },
+    {
+      "name": "card_belong_to",
+      "value": "所属银行"
     }
   ]
 }

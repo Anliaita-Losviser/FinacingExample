@@ -1,5 +1,5 @@
 /*
- * Copyright (c) StarHidden2846@gmail.com Last Update: 2024-07-13 18:50:37. All Rights Reserved.
+ * Copyright (c) StarHidden2846@gmail.com Last Update: 2024-07-17 11:54:26. All Rights Reserved.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -28,56 +28,55 @@
  * 以二进制形式重新分发时，必须在分发时提供的文档或其他材料中复制上述版权通知、本条件列表以及以下免责声明。
  * 未经事先书面许可，不得使用开发者或贡献者的名称来认可或推广从本软件派生出来的产品。
  */
-import { FontSizes } from '../common/CommonStyles'
+import agconnect from '@hw-agconnect/api-ohos'
+import '@hw-agconnect/core-ohos'
+import '@hw-agconnect/function-ohos'
 
-@Component
-export struct InputWidget {
-  @State isFoucs: boolean = false
-  title: ResourceStr
-  icon: Resource
-  placeholder: ResourceStr
-  inputType: InputType = InputType.Normal
-  widgetWidth: number = 320
-  defaultValue: string
-  change = (val: string)=>{}
-  build() {
-    Column() {
-      Text(this.title).fontSize(FontSizes.Third).fontWeight(FontWeight.Regular)
-        .margin({ bottom: 16 }).alignSelf(ItemAlign.Start)
-
-      Row() {
-        if(this.icon)
-        {
-          Image(this.icon).Ico()
-        }
-        TextInput({ placeholder: this.placeholder,
-        text: this.defaultValue})
-          .onFocus(() => {
-            this.isFoucs = true
-          })
-          .onBlur(() => {
-            this.isFoucs = false
-          })
-          /**
-           * 监听输入框内容变化
-           */
-          .onChange((val: string)=>{
-            this.change(val)
-          })
-          .style(TextInputStyle.Inline)
-          .type(this.inputType)
-          .backgroundColor($r('app.color.white')).width(256)
-      }
-      .width(this.widgetWidth)
-      .height(50)
-      .borderRadius(15)
-      .border({ width: this.isFoucs ? 2 : 0 })
-      .justifyContent(FlexAlign.Center)
-      Divider()
-    }.width(this.widgetWidth).alignItems(HorizontalAlign.Center)
-  }
-
-  @Styles Ico(){
-    .width(32).height(32)
-  }
+/**
+ * 添加用户
+ */
+export const addUser = async (payload)=>{
+  const functionCallable = agconnect.function().wrap("user-$latest")
+  //拿到结果
+  const result =await functionCallable.call({
+    action: 'add',
+    payload
+  })
+  return result.getValue()
+}
+/**
+ * 查询用户
+ */
+export const queryUser = async (payload)=>{
+  const functionCallable = agconnect.function().wrap("user-$latest")
+  //拿到结果
+  const result =await functionCallable.call({
+    action: 'query',
+    payload
+  })
+  return result.getValue()
+}
+/**
+ * 添加银行卡
+ */
+export const addBankCard = async (payload)=>{
+  const functionCallable = agconnect.function().wrap("add-card-$latest")
+  //拿到结果
+  const result =await functionCallable.call({
+    action: 'add',
+    payload
+  })
+  return result.getValue()
+}
+/**
+ * 查询银行卡
+ */
+export const queryBankCard = async (payload)=>{
+  const functionCallable = agconnect.function().wrap("add-card-$latest")
+  //拿到结果
+  const result =await functionCallable.call({
+    action: 'query',
+    payload
+  })
+  return result.getValue()
 }

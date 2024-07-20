@@ -32,19 +32,108 @@ import router from '@ohos.router'
 import { FontSizes } from '../common/CommonStyles'
 import { InputWidget } from '../components/Input'
 import { FunctionTitleComponent } from '../components/TitleComponent'
-
+import { EmailAuthProvider, VerifyCodeAction, VerifyCodeSettingBuilder, PhoneUserBuilder,
+  PhoneAuthProvider, AGConnectAuth, AGConnectAuthCredentialProvider, EmailUserBuilder
+} from "@hw-agconnect/auth-ohos"
+import agconnect from '@hw-agconnect/api-ohos'
+import { addUser } from '../services/CloudServices'
 
 @Entry
 @Component
 struct Login {
-  @State isRegister: boolean = false
-  @State countDown: number = 60
+  @State isRegister: boolean = false//是否是注册状态
+  @State countDown: number = 120//倒计时，120秒
   timer: number
+  @State email:string = '2927848634@qq.com'//邮箱信息
+  @State passWord:string = 'abc123456'//密码，初始abc123456
+  @State verifyCode:string = ''//验证码
   /**
    * 发送验证码
    */
-  SendCode(){
+  async SendCode(){
     this.StartCountDown()
+    //发送邮箱验证码
+    const verifyCodeSetting = new VerifyCodeSettingBuilder()
+      .setAction(VerifyCodeAction.REGISTER_LOGIN)//验证码类型：注册或登录
+      .setLang('zh_CN')
+      .setSendInterval(120)
+      .build()
+    await agconnect.auth().requestEmailVerifyCode(this.email, verifyCodeSetting)
+      .then(async verifyCodeResult => {
+        //验证码申请成功
+        console.log(JSON.stringify(verifyCodeResult),'验证码申请成功')
+      }).catch(error => {
+      //验证码申请失败
+        console.log(JSON.stringify(error),'验证码申请失败')
+    })
+  }
+  /**
+   * 注册功能函数
+   */
+  Register(){
+    /**
+     * 通过检查邮箱、密码、验证码完成注册
+     */
+    //首先构造一个emailUser对象，设置其附带的邮箱、密码、验证码信息
+    const emailUser = new EmailUserBuilder()
+      .setEmail(this.email)
+      .setPassword(this.passWord) //可以给用户设置初始密码。填写后后续可以用密码来登录
+      .setVerifyCode(this.verifyCode)
+      .build()
+    //创建用户（华为认证层面）
+    agconnect.auth().createEmailUser(emailUser)
+      .then(async (result) => {
+        //创建用户到云数据库
+        const user = await agconnect.auth().getCurrentUser()
+        const data = await addUser({
+          uuid: user.getUid(),
+          email: this.email
+        })
+        //跳转主页
+        router.replaceUrl({url: 'pages/MainPage'})
+        //创建帐号成功后，默认已登录
+        console.log(JSON.stringify(result),'创建帐号成功')
+      })
+      .catch(error => {
+        //创建用户失败
+        console.log(JSON.stringify(error),'创建用户失败')
+      })
+  }
+  /**
+   * 登录功能函数
+   */
+  async DoLogin(){
+    try {
+      //使用邮箱密码登录
+      const credential = EmailAuthProvider.credentialWithPassword(this.email,this.passWord)
+      //执行登录
+      const user = await agconnect.auth().signIn(credential)
+      //判断用户是否存在
+      if(user!= null){
+        router.replaceUrl({url: 'pages/MainPage'})
+      }
+    }
+    catch (error){
+      console.error(error, '登录失败')
+    }
+  }
+  /**
+   * onPageShow里面判断用户是否登录
+   */
+  async CheckIfLogin(){
+    const user = await agconnect.auth().getCurrentUser()
+    return user != null
+  }
+  async onPageShow(){
+    try {
+      const isLogin = await this.CheckIfLogin()
+      if(isLogin){
+        router.replaceUrl({url: 'pages/MainPage'})
+      }
+    }
+    catch (error){
+      console.error(error, '未登录')
+    }
   }
   /**
    * 定时器倒计时功能
@@ -53,7 +142,7 @@ struct Login {
     this.timer = setInterval(()=>{
       this.countDown -= 1
       if(this.countDown === 0){
-        this.countDown = 60
+        this.countDown = 120
         clearInterval(this.timer)
       }
     }, 1000)
@@ -71,12 +160,20 @@ struct Login {
       Column() {
         //邮箱框
         InputWidget({ title: $r('app.string.loginpage_email_title'),
-          icon: $r('app.media.envelope_fill') })
+          icon: $r('app.media.envelope_fill'),
+          defaultValue: this.email,
+          change: (val) => {
+          this.email = val
+        }})
           .margin({ top: 16, bottom: 16 })
         //密码
         InputWidget({ title: $r('app.string.loginpage_password_title'),
           icon: $r('app.media.lock_fill'),
-          inputType: InputType.Password })
+          inputType: InputType.Password,
+          defaultValue: this.passWord,
+          change: (val) => {
+            this.passWord = val
+          }})
           .margin({ top: 16, bottom: 16 })
         //验证码输入框
         if(this.isRegister)
@@ -87,9 +184,12 @@ struct Login {
               TextInput()
                 .width(272).margin({ left: 8, right: 8})
                 .backgroundColor($r('app.color.white'))
-              Button(this.countDown === 60 ? $r('app.string.get_vertify_code'): `${this.countDown}s`)
+                .onChange((val:string)=>{
+                  this.verifyCode = val
+                })
+              Button(this.countDown === 120 ? $r('app.string.get_vertify_code'): `${this.countDown}s`)
                 .onClick(()=>{
-                  if(this.countDown === 60){
+                  if(this.countDown === 120){
                     this.SendCode()
                   }
                 })
@@ -97,17 +197,20 @@ struct Login {
           }
         }
         //登录按钮
-        Button($r('app.string.loginpage_title')).BottonStyle()
+        Button(this.isRegister == false ? $r('app.string.loginpage_title'): $r('app.string.signup')).BottonStyle()
           .backgroundColor($r('app.color.theme_red'))
           .onClick(()=>{
-            router.replaceUrl({url: 'pages/MainPage'})
+            this.isRegister ? this.Register(): this.DoLogin()
           })
+
         //注册按钮
         Button(this.isRegister == false ? $r('app.string.signup') : $r('app.string.back'))
           .BottonStyle()
           .fontColor($r('app.color.black'))
           .backgroundColor($r('app.color.background_secondary'))
-          .onClick(()=>{this.isRegister = !this.isRegister})
+          .onClick(()=>{
+            this.isRegister = !this.isRegister
+          })
       }
       .backgroundColor($r('app.color.white')).borderRadius(16)
       .width(348).margin({ top:16, bottom: 16 })
