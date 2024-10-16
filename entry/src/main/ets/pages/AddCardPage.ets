@@ -98,6 +98,7 @@ struct AddCardPage {
           .onClick(async ()=>{
             try{
               //获取当前登录用户的信息
+              // @ts-ignore
               const user = await agconnect.auth().getCurrentUser()
               if (!user){
                 //未登录则跳到登录页面
@@ -128,7 +129,6 @@ struct AddCardPage {
             }catch (error){
               console.error(error,'添加错误')
             }
-
           })
       }.width(348).margin({ top:16, bottom: 16 })
     }

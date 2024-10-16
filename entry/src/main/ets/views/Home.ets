@@ -101,7 +101,11 @@ export struct Home {
           Flex() {
             BusinessCardButton({ name: '转账' })
               .onClick(()=> {
-                router.pushUrl({url: 'pages/PayPage'})
+                router.pushUrl({url: 'pages/PayPage',
+                params:{
+                  //收款人id
+                  payeeId: '1469625907781088064'
+                }})
               })
             BusinessCardButton({ name: '收款' })
             BusinessCardButton({ name: '账单' })

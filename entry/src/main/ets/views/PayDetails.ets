@@ -31,12 +31,40 @@
 import { FontSizes } from '../common/CommonStyles'
 import { InputWidget } from '../components/Input'
 import { CommonTitle } from '../components/TitleComponent'
+import { Card } from '../models/CardModel'
+import { User } from '../models/userData'
+import UserModel from '../viewModels/UserViewmodel'
 
 @CustomDialog
 export struct PayDetails{
   controller : CustomDialogController
+  @Link payeeId: string
+  @Link payerCards: Card[]
+  @State payeeInfo:User = new User()
+  @Link PayAmount: number
+  //点击确认执行onConfirm
+  onConfirm = async (amount)=>{}
   getCardOptions(){
-    return [{value: '工商银行'}]
+    return this.payerCards.map((item)=>{
+      return {value: `${item.bank}+${item.cardNumber}`}
+    })
+  }
+  /**
+   * 获取信息
+   */
+  async aboutToAppear(){
+    //获取收款人信息
+    try{
+      UserModel.getUserInfoById(this.payeeId).then((data)=>{
+        this.payeeInfo = data
+        if(this.payeeInfo){
+          console.log("获取收款人信息成功")
+        }
+      }).catch(error => {console.error(error)})
+    }catch(error){
+      console.error(error,'获取收款人信息错误')
+    }
+
   }
   build(){
     Flex({direction: FlexDirection.Column, alignItems:ItemAlign.Center}){
@@ -48,7 +76,7 @@ export struct PayDetails{
       Column(){
         Image($r('app.media.person_crop_circle_fill_1'))
           .width(48).height(48)
-        Text('xx公司').fontSize(FontSizes.Normal)
+        Text(this.payeeInfo.name).fontSize(FontSizes.Normal)
         Text('年度会员').fontSize(FontSizes.Normal)
       }.width(192).height(96).padding(8).margin(8)
       .justifyContent(FlexAlign.End)
@@ -68,12 +96,13 @@ export struct PayDetails{
         Image($r('app.media.card_bacground')).width(36).height(24)
         .borderRadius(4).margin(8)
 
-        Select(this.getCardOptions())
-          .selected(1)
-          .value( '工商银行').font({size: FontSizes.Normal})
-          .selectedOptionFont({size: FontSizes.Normal})
-          .optionFont({size: FontSizes.Normal})
-
+        if(this.getCardOptions().length){
+          Select(this.getCardOptions())
+            .selected(1)
+            .value( this.getCardOptions()[0].value).font({size: FontSizes.Normal})
+            .selectedOptionFont({size: FontSizes.Normal})
+            .optionFont({size: FontSizes.Normal})
+        }
       }.width(296).height(64).padding(8).margin(8)
       .justifyContent(FlexAlign.SpaceBetween)
       .borderRadius(16)
@@ -88,14 +117,29 @@ export struct PayDetails{
       /**
        * 金额
        */
-      Text('￥200').fontSize(FontSizes.Third)
+      Text(`￥${this.PayAmount}`).fontSize(FontSizes.Third)
         .width('100%').textAlign(TextAlign.Center)
       //输入框
       InputWidget({title: $r('app.string.owner_name')}).margin({top: 8})
       InputWidget({title: $r('app.string.edit_my_page_phoneNumber')}).margin({top: 8})
-      Button($r('app.string.edit_page_confirm'))
-        .width(120).height(36).margin({ top: 16, bottom: 16 })
-        .backgroundColor($r('app.color.theme_red'))
+      Row(){
+        Button($r('app.string.edit_page_cancel'))
+          .width(120).height(36).margin({ top: 16, bottom: 16 })
+          .backgroundColor($r('app.color.background_secondary'))
+          .fontColor($r('app.color.theme_red'))
+          .onClick(()=>{
+            //关闭弹窗
+            this.controller.close()
+          })
+        Button($r('app.string.edit_page_confirm'))
+          .width(120).height(36).margin({ top: 16, bottom: 16 })
+          .backgroundColor($r('app.color.theme_red'))
+          .onClick(()=>{
+            console.log('支付金额')
+            console.log(this.PayAmount.toString())
+            this.onConfirm(this.PayAmount)
+          })
+      }.width('100%').justifyContent(FlexAlign.SpaceEvenly)
     }.width('100%').height('100%').backgroundColor($r('app.color.white'))
     .margin({top: 80}).borderRadius({topLeft: 24,topRight: 24})
   }

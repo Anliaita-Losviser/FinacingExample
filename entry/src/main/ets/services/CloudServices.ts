@@ -57,6 +57,18 @@ export const queryUser = async (payload)=>{
   return result.getValue()
 }
 /**
+ * 修改用户信息
+ */
+export const patchUser = async (payload)=>{
+  const functionCallable = agconnect.function().wrap("user-$latest")
+  //拿到结果
+  const result =await functionCallable.call({
+    action: 'patch',
+    payload
+  })
+  return result.getValue()
+}
+/**
  * 添加银行卡
  */
 export const addBankCard = async (payload)=>{
@@ -76,6 +88,15 @@ export const queryBankCard = async (payload)=>{
   //拿到结果
   const result =await functionCallable.call({
     action: 'query',
+    payload
+  })
+  return result.getValue()
+}
+
+export const onPay = async (payload)=>{
+  const functionCallable = agconnect.function().wrap("pay-records-$latest")
+  const result =await functionCallable.call({
+    action: 'add',
     payload
   })
   return result.getValue()

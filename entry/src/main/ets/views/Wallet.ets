@@ -30,8 +30,8 @@
  */
 import router from '@ohos.router'
 import { FontSizes } from '../common/CommonStyles'
-
 import { CommonTitle } from '../components/TitleComponent'
+import { Card } from '../models/CardModel'
 import { BankCard } from './BankCard'
 import { TransactionCard } from './TransactionInfomation'
 
@@ -39,6 +39,7 @@ import { TransactionCard } from './TransactionInfomation'
 @Component
 export struct Wallet {
   @State arr: Array<number> = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+  @Link cards: Card[]
   build(){
     Scroll(){
       Flex({ wrap: FlexWrap.Wrap,
@@ -70,8 +71,20 @@ export struct Wallet {
            * 2.银行卡组件
            */
           Swiper() {
-            BankCard()
+            if(this.cards && this.cards.length){
+              ForEach(this.cards,(item)=>{
+                BankCard({
+                  bankName: item.bank,
+                  balance: item.amount,
+                  bankCardNumber: item.cardNumber
+                })
+              })
+            }
+            else {
+              BankCard()
+            }
           }.loop(true)
+
           .indicatorStyle({
             size: 8,
             color: $r('app.color.white'),

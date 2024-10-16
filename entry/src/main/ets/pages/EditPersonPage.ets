@@ -29,13 +29,27 @@
  * 未经事先书面许可，不得使用开发者或贡献者的名称来认可或推广从本软件派生出来的产品。
  */
 import router from '@ohos.router'
+import Notification from '@system.notification'
 import { FontSizes } from '../common/CommonStyles'
 import { InputWidget } from '../components/Input'
 import { CommonTitle, FunctionTitleComponent } from '../components/TitleComponent'
+import { User } from '../models/userData'
+import { patchUser } from '../services/CloudServices'
+import UserModel from '../viewModels/UserViewmodel'
 
 @Entry
 @Component
 struct EditPersonPage {
+  @State userInfo: User = new User()
+  async onPageShow(){
+    try {
+      UserModel.getUserInfo().then((data)=>{
+        this.userInfo = data
+      }).catch(error => {console.error(error)})
+    }catch (error){
+      console.error(error,'错误')
+    }
+  }
   build() {
     Column(){
       //标题
@@ -56,9 +70,21 @@ struct EditPersonPage {
         topMargin: 16,
         bottomMargin: 8}).width(320)
       //表单，姓名、电话、邮箱、出生日期、性别
-      InputWidget({title: $r('app.string.owner_name')}).margin({top: 8})
-      InputWidget({title: $r('app.string.edit_my_page_phoneNumber')}).margin({top: 8})
-      InputWidget({title: $r('app.string.edit_my_page_email')}).margin({top: 8})
+      InputWidget({title: $r('app.string.owner_name'),
+        defaultValue: this.userInfo.name,
+        change: (val)=>{
+          this.userInfo.name = val
+        }}).margin({top: 8})
+      InputWidget({title: $r('app.string.edit_my_page_phoneNumber'),
+        defaultValue: this.userInfo.phone,
+        change: (val)=>{
+          this.userInfo.phone = val
+        }}).margin({top: 8})
+      InputWidget({title: $r('app.string.edit_my_page_email'),
+        defaultValue: this.userInfo.email,
+        change: (val)=>{
+          this.userInfo.email = val
+        }}).margin({top: 8})
       //确认、取消按钮
       Row(){
         Button($r('app.string.edit_page_cancel'))
@@ -71,6 +97,13 @@ struct EditPersonPage {
         Button($r('app.string.edit_page_confirm'))
           .width(120).height(36).margin({ top: 16, bottom: 16 })
           .backgroundColor($r('app.color.theme_red'))
+          .onClick(async ()=>{
+            await patchUser(this.userInfo)
+            Notification.show({
+              contentTitle:'修改成功'
+            })
+            setTimeout(()=>router.back(),1000)
+          })
       }.width('100%').justifyContent(FlexAlign.SpaceEvenly)
     }.width('100%').height('100%').alignItems(HorizontalAlign.Center)
   }

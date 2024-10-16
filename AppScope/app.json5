@@ -2,8 +2,8 @@
   "app": {
     "bundleName": "com.example.qianfengfinacemanager",
     "vendor": "example",
-    "versionCode": 1000000,
-    "versionName": "1.0.0",
+    "versionCode": 1005000,
+    "versionName": "1.1.10",
     "icon": "$media:icon",
     "label": "$string:app_name"
   }

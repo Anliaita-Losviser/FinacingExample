@@ -1,5 +1,5 @@
 /*
- * Copyright (c) StarHidden2846@gmail.com Last Update: 2024-07-15 20:52:39. All Rights Reserved.
+ * Copyright (c) StarHidden2846@gmail.com Last Update: 2024-07-21 19:40:28. All Rights Reserved.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -28,67 +28,59 @@
  * 以二进制形式重新分发时，必须在分发时提供的文档或其他材料中复制上述版权通知、本条件列表以及以下免责声明。
  * 未经事先书面许可，不得使用开发者或贡献者的名称来认可或推广从本软件派生出来的产品。
  */
-import router from '@ohos.router'
 import { FontSizes } from '../common/CommonStyles'
 import { CommonTitle } from '../components/TitleComponent'
-import agconnect from '@hw-agconnect/api-ohos'
-import { User } from '../models/userData'
-import userModel from '../viewModels/UserViewmodel'
+import web_webview from '@ohos.web.webview'
+
 @Preview
 @Component
-export struct MyInfomation {
-  @Link userInfo: User
+export struct Statistic {
+  @State payRecords: PayRecords[] = [{income:'290',outcome: '340',date: new Date("2024-7-21")}
+  ,{income:'355',outcome: '234',date: new Date("2024-7-22")},{income:'964',outcome: '288',date: new Date("2024-7-23")}
+  ,{income:'111',outcome: '535',date: new Date("2024-7-24")},{income:'263',outcome: '333',date: new Date("2024-7-25")}
+  ,{income:'986',outcome: '185',date: new Date("2024-7-26")},{income:'248',outcome: '625',date: new Date("2024-7-27")}]
 
-  logout(){
-    //退出登录，回到登录页面
-    // @ts-ignore
-    agconnect.auth().signOut()
-    router.replaceUrl({url: 'pages/Login'})
+  controller: web_webview.WebviewController = new web_webview.WebviewController()
+  //给webview传的上下文
+  context = {
+    getPayRecordsTotal: ()=>{
+      return JSON.stringify(this.payRecords)
+    }
   }
   build(){
     Column(){
       CommonTitle({
-        title: $r('app.string.my_page_title'),
+        title: $r('app.string.statitstic_page'),
         topMargin: 24,
         bottomMargin: 16,
         fontWeight: FontWeight.Bold,
         fontSize: FontSizes.Second,
         alignWay: FlexAlign.Center
       })
-      //个人信息栏
-      Column(){
-        Image($r('app.media.person_crop_circle_fill_1'))
-          .width(96).height(96)
-        Text(this.userInfo.name).fontSize(FontSizes.Normal)
-        Text(this.userInfo.email).fontSize(FontSizes.Normal)
-      }.width(256).margin({top: 24,bottom: 24})
-
-      Flex({alignItems:ItemAlign.Center,justifyContent:FlexAlign.SpaceBetween}){
-        Image($r('app.media.square_and_pencil')).height(36).width(36)
-        Text('编辑个人信息')
-        Image($r('app.media.chevron_right')).height(36).width(18)
-          .onClick(()=>{
-            /**
-             * 跳转到编辑页面
-             */
-            router.pushUrl({url: 'pages/EditPersonPage'})
-          })
-      }.margin({bottom:24}).padding(8)
-
-      Flex({alignItems:ItemAlign.Center,justifyContent:FlexAlign.SpaceBetween}){
-        Image($r('app.media.square_and_pencil')).height(36).width(36)
-        Text('个人二维码')
-        Image($r('app.media.chevron_right')).height(36).width(18)
-          .onClick(()=>{
-            router.pushUrl({url: 'pages/QRcodeGeneratePage'})
-          })
-      }.margin({bottom:24}).padding(8)
-
-      Button($r('app.string.my_page_unsignin')).width(120).height(36)
-        .backgroundColor($r('app.color.theme_red'))
-        .onClick(()=>{
-          this.logout()
-        })
-    }.width(348).height('100%').justifyContent(FlexAlign.Start)
+      Web({
+        src: $rawfile('index.html'),
+        controller: this.controller
+      }).javaScriptProxy({
+        //注入上下文
+        object: this.context,
+        //指定web端可以接收的key
+        name: 'context',
+        controller: this.controller,
+        //webview调用应用侧函数
+        methodList: ['getPayRecordsTotal']
+      }).onConsole((event)=>{
+        console.log('--page log--页面数据',event.message.getMessage())
+        return true
+      })
+    }.height('100%').width('100%')
   }
+}
+/**
+ * 由于Deveco Studio稳定性问题，云函数频繁上传失败，且云端serverless功能不完善，
+ * 故暂时不实现查询数据功能，写静态数据验证webview
+ */
+class PayRecords{
+  income: string
+  outcome: string
+  date: Date
 }

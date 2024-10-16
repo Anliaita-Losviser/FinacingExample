@@ -30,17 +30,67 @@
  */
 import router from '@ohos.router'
 import { FunctionTitleComponent } from '../components/TitleComponent'
+import { Card } from '../models/CardModel'
 import { PayDetails } from '../views/PayDetails'
+import CardModel from '../viewModels/CardViewmodel'
+import { onPay } from '../services/CloudServices'
+import { User } from '../models/userData'
+import UserModel from '../viewModels/UserViewmodel'
 
 @Entry
 @Component
 struct PayPage {
+  //弹窗
   dialogController = new CustomDialogController({
-    builder: PayDetails(),
+    builder: PayDetails({
+      payeeId: $payeeId,
+      payerCards: $cards,
+      PayAmount: $PayAmount,
+      onConfirm: async (amount)=>{
+        console.log('查看')
+        console.log(this.payerInfo.uuid)
+        console.log(this.payeeId)
+        await onPay({
+          //传付款人的信息
+          payer: this.payerInfo.uuid,
+          payee: this.payeeId,
+          amount,
+        })
+        setTimeout(()=>{
+          router.back()
+        },1000)
+      }
+    }),
     alignment: DialogAlignment.Bottom,
-    customStyle: true
+    customStyle: true,
   })
-  onPageShow(){
+  //收款人id
+  @State payeeId:string = ''
+  //付款人（当前登录用户）信息
+  @State payerInfo:User = new User()
+  //付款人（当前登录用户）银行卡信息
+  @State cards: Card[]=[]
+  @State PayAmount: number = 20
+
+  async onPageShow(){
+    const params = router.getParams()
+    this.payeeId = params['payeeId']
+    try {
+      CardModel.getCardList().then((data)=>{
+        this.cards = data
+        if (this.cards){
+          console.log("获取付款人（当前登录用户）银行卡信息")
+        }
+      }).catch (error => {console.error(error)})
+      UserModel.getUserInfo().then((data)=>{
+        this.payerInfo = data
+        if(this.payerInfo){
+          console.log("获取付款人（当前登录用户）信息")
+        }
+      }).catch(error => {console.error(error)})
+    }catch (error){
+      console.error(error,'错误')
+    }
     //显示页面打开弹窗
     this.dialogController.open()
   }

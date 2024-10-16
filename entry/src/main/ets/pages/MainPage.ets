@@ -34,7 +34,8 @@ import { Wallet } from '../views/Wallet'
 import { Card } from '../models/CardModel'
 import CardModel from '../viewModels/CardViewmodel'
 import { User } from '../models/userData'
-import userModel from '../viewModels/UserViewmodel'
+import UserModel from '../viewModels/UserViewmodel'
+import { Statistic } from '../views/Statistic'
 
 @Entry
 @Component
@@ -52,14 +53,14 @@ struct MainPage {
           this.cards = data
         })
         .catch (error => {console.error(error)})
-      userModel.getUserInfo().then((data)=>{
+      UserModel.getUserInfo().then((data)=>{
         this.userInfo = data
       }).catch(error => {console.error(error)})
     }catch (error){
       console.error(error,'错误')
     }
   }
-
+  //软件主体界面结构，包含底部的tab栏和首页、统计、钱包、我的四大部分
   build() {
     Tabs({barPosition: this.curBp == 'sm'? BarPosition.End : BarPosition.Start, controller: this.tabsController}){
       TabContent() {
@@ -68,11 +69,11 @@ struct MainPage {
       .tabBar(this.TabBuilder($r('app.string.main_page'), 0,$r('app.media.house_fill_selected'),$r('app.media.house_fill')))
       TabContent() {
         //统计页面用webview实现
-        Text('统计').fontSize(30)
+        Statistic()
       }
-      .tabBar(this.TabBuilder($r('app.string.statitstic_page'),1,$r('app.media.statistics_selected'), $r('app.media.statistics')))
+      .tabBar(this.TabBuilder('统计',1,$r('app.media.statistics_selected'), $r('app.media.statistics')))
       TabContent() {
-        Wallet()
+        Wallet({cards: $cards})
       }
       .tabBar(this.TabBuilder($r('app.string.packet_page'),2,$r('app.media.case_fill_selected'), $r('app.media.case_fill')))
       TabContent() {
